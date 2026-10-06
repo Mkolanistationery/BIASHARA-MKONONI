@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}SMS{% endblock %}
+{% block heading %}SMS Center{% endblock %}
+{% block content %}
+<div class="grid"><div class="stat"><div class="l">SMS credits ulizonazo</div><div class="v">{{ biz.sms_credits|money }}</div></div></div>
+{% if not sms_enabled %}<div class="flash warning">Huduma ya SMS bado haijawashwa kwenye mfumo. Wasiliana na msimamizi.</div>{% elif biz.sms_credits <= 0 %}<div class="flash warning">Huna SMS credits. Wasiliana nasi kuongeza: {{ support_phone }}.</div>{% endif %}
+<div class="grid2">
+<div class="card"><h2>Tuma SMS</h2>
+<form method="post" action="{{ url_for('sms_send') }}" data-confirm="Tuma SMS hizi sasa? Credits zitakatwa.">{{ csrf_input() }}
+<div class="f"><label for="rt">Wapokeaji</label><select id="rt" name="recipient_type"><option value="all">Wateja wote</option><option value="debtors">Wenye madeni tu</option><option value="single">Mteja mmoja</option><option value="custom">Namba nilizoandika</option></select></div>
+<div class="f" id="single" hidden data-x><label>Mteja</label><select name="single_phone">{% for c in customers %}<option value="{{ c.phone }}">{{ c.name }} ({{ c.phone }})</option>{% endfor %}</select></div>
+<div class="f" id="custom" hidden><label>Namba (zitenganishwe kwa koma au mstari mpya)</label><textarea name="custom_phones" placeholder="0768000000, 0712000000"></textarea></div>
+<div class="f"><label for="msg">Ujumbe</label><textarea id="msg" name="message" required data-counter="#cnt" maxlength="480"></textarea><span class="small mute" id="cnt"></span><br><span class="small mute">Tumia herufi za kawaida tu (bila emoji au alama maalum).</span></div>
+<button class="btn" type="submit">Tuma</button></form></div>
+<div class="card"><h2>Vikumbusho vya madeni</h2><p class="mute">Tuma ujumbe wa kikumbusho kwa kila mdaiwa ambaye tarehe yake ya kulipa imefika au kupita (hadi watu 50).</p>
+<form method="post" action="{{ url_for('sms_remind') }}" data-confirm="Tuma vikumbusho kwa wadaiwa waliochelewa?">{{ csrf_input() }}<button class="btn gold" type="submit">Tuma vikumbusho</button></form>
+<p class="small mute" style="margin-top:12px">"Imekubaliwa" inamaanisha Beem imepokea ombi. Kufika simuni kunategemea mtandao wa simu na ruhusa ya Sender ID.</p></div></div>
+<div class="card"><h2>Historia</h2>{% if logs %}<div class="tw"><table><tr><th>Muda</th><th>Wapokeaji</th><th>Ujumbe</th><th>Hali</th></tr>
+{% for l in logs %}<tr><td class="nowrap">{{ l.created_at|dt }}</td><td>{{ l.recipient }}{% if l.recipients_count > 1 %} ({{ l.recipients_count }}){% endif %}</td><td>{{ l.message[:80] }}</td>
+<td><span class="badge {{ '' if l.status == 'accepted' else 'red' }}">{{ {'accepted':'Imekubaliwa','failed':'Imeshindwa','blocked':'Imezuiwa'}[l.status] }}</span>{% if l.status != 'accepted' %}<div class="small mute">{{ l.detail }}</div>{% endif %}</td></tr>{% endfor %}</table></div>
+{% else %}<p class="mute">Bado hujatuma SMS.</p>{% endif %}</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/sms.js') }}"></script>{% endblock %}

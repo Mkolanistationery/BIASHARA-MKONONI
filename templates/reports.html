@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Ripoti{% endblock %}
+{% block heading %}Ripoti{% endblock %}
+{% block content %}
+<div class="toolbar tabs">{% for k, l in [('today','Leo'),('week','Siku 7'),('month','Mwezi huu'),('all','Zote')] %}<a href="{{ url_for('reports', period=k) }}" class="{{ 'on' if period == k }}">{{ l }}</a>{% endfor %}
+<a class="btn ghost sm" href="{{ url_for('reports_csv', period=period) }}">Pakua CSV</a></div>
+<div class="grid"><div class="stat"><div class="l">Mauzo ({{ count }})</div><div class="v">TZS {{ total_sales|money }}</div></div>
+<div class="stat"><div class="l">Faida ya mauzo</div><div class="v">TZS {{ profit|money }}</div></div>
+<div class="stat"><div class="l">Matumizi</div><div class="v">TZS {{ expenses|money }}</div></div>
+<div class="stat"><div class="l">Faida halisi</div><div class="v" style="color:{{ 'var(--red)' if net < 0 else 'var(--green)' }}">TZS {{ net|money }}</div></div></div>
+<div class="grid2"><div class="card"><h2>Kwa njia ya malipo</h2>{% if pay %}<table>{% for k, v in pay.items() %}<tr><td>{{ k }}</td><td class="num">{{ v|money }}</td></tr>{% endfor %}</table>{% else %}<p class="mute">Hakuna data.</p>{% endif %}</div>
+<div class="card"><h2>Bidhaa bora</h2>{% if top %}<table><tr><th>Bidhaa</th><th class="num">Idadi</th><th class="num">TZS</th></tr>{% for n, v in top %}<tr><td>{{ n }}</td><td class="num">{{ v[0] }}</td><td class="num">{{ v[1]|money }}</td></tr>{% endfor %}</table>{% else %}<p class="mute">Hakuna data.</p>{% endif %}</div></div>
+<div class="card"><h2>Mauzo (100 ya mwisho)</h2>{% if sales_list %}<div class="tw"><table><tr><th>Risiti</th><th>Muda</th><th>Mteja</th><th>Malipo</th><th class="num">Jumla</th><th>Hali</th></tr>
+{% for s in sales_list %}<tr><td><a href="{{ url_for('receipt', sale_id=s.id) }}">{{ s.receipt_no }}</a></td><td class="nowrap">{{ s.created_at|dt }}</td><td>{{ s.customer_name }}</td><td>{{ s.payment_method }}</td><td class="num">{{ s.total|money }}</td>
+<td>{% if s.status == 'void' %}<span class="badge red" title="{{ s.void_reason }}">Imebatilishwa</span>{% elif s.status == 'credit' %}<span class="badge gold">Deni</span>{% else %}<span class="badge">Imelipwa</span>{% endif %}</td></tr>{% endfor %}</table></div>
+{% else %}<p class="mute">Hakuna mauzo kwa kipindi hiki.</p>{% endif %}</div>
+{% endblock %}

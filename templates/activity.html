@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Shughuli{% endblock %}
+{% block heading %}Kumbukumbu ya shughuli{% endblock %}
+{% block content %}
+<div class="card"><p class="mute">Shughuli 150 za mwisho kwenye biashara yako: nani alifanya nini na lini.</p>
+{% if logs %}<div class="tw"><table><tr><th>Muda</th><th>Mtumiaji</th><th>Kitendo</th><th>Maelezo</th></tr>
+{% for l in logs %}<tr><td class="nowrap">{{ l.created_at|dt }}</td><td>{{ l.user.name if l.user else '-' }}</td><td>{{ l.action }}</td><td>{{ l.detail or '' }}</td></tr>{% endfor %}</table></div>
+{% else %}<p class="mute">Bado hakuna shughuli.</p>{% endif %}</div>
+{% endblock %}

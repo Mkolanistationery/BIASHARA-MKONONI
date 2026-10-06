@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Mkolani POS - Risiti, stoko na madeni ya biashara yako{% endblock %}
+{% block shell %}
+<header class="ph"><a class="brand" href="{{ url_for('landing') }}">Mkolani POS</a>
+<nav><a href="#thibitisha" class="small">Thibitisha risiti</a><a class="btn ghost sm" href="{{ url_for('login') }}">Ingia</a><a class="btn sm" href="{{ url_for('register') }}">Jisajili</a></nav></header>
+<section class="hero-l">
+<div>
+<h1>Jua pesa ya duka lako iko wapi kila jioni.</h1>
+<p>Rekodi mauzo, toa risiti, fuatilia stoko na madeni ya wateja, na tuma SMS kutoka simu yako. Imetengenezwa Mwanza kwa biashara za Tanzania.</p>
+<p style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn gold" href="{{ url_for('register') }}">Anza siku {{ trial_days }} za majaribio</a><a class="btn ghost" href="{{ url_for('login') }}">Nina akaunti</a></p>
+</div>
+<div class="slip" aria-label="Mfano wa risiti" style="margin:0 auto">
+<h2>DUKA LA MFANO</h2><p class="c">Mwanza · Mfano</p><hr>
+<table><tr><td>Sukari 2kg</td><td class="num">x2</td><td class="num">6,400</td></tr><tr><td>Mafuta 1L</td><td class="num">x1</td><td class="num">5,500</td></tr></table><hr>
+<table><tr><td><b>JUMLA</b></td><td class="num"><b>TZS 11,900</b></td></tr><tr><td>Malipo</td><td class="num">M-PESA</td></tr></table><hr>
+<p class="c">Risiti MK0000123<br>Asante, karibu tena!</p></div>
+</section>
+<section class="sec"><h2>Kinachofanya kazi leo</h2>
+<div class="feat">
+<div class="card"><h3>Mauzo na risiti</h3><p>Risiti ya 58/80mm yenye nembo yako na QR ya kuthibitisha. Muuzaji hawezi kubadilisha bei za bidhaa zilizosajiliwa.</p></div>
+<div class="card"><h3>Stoko</h3><p>Stoko inapungua kila mauzo, na unaonywa bidhaa zinapokaribia kuisha.</p></div>
+<div class="card"><h3>Madeni na mikopo</h3><p>Malipo kidogo kidogo, tarehe za mwisho na vikumbusho vya SMS kwa waliochelewa.</p></div>
+<div class="card"><h3>Wateja na SMS</h3><p>Orodha ya wateja na SMS kwa wote, kwa mteja mmoja au kwa wadaiwa tu.</p></div>
+<div class="card"><h3>Ripoti</h3><p>Mauzo, faida, matumizi, bidhaa zinazouzika zaidi, na faili la CSV linalofunguka Excel.</p></div>
+<div class="card"><h3>Wafanyakazi</h3><p>Mmiliki, meneja na muuzaji, kila mmoja na ruhusa zake, pamoja na kumbukumbu ya shughuli.</p></div>
+</div></section>
+<section class="sec"><h2>Inakuja</h2>
+<div class="feat">
+<div class="card"><h3>Ada za shule <span class="badge grey">Inakuja</span></h3><p>Risiti za ada, rekodi za wazazi na ujumbe wa vikumbusho.</p></div>
+<div class="card"><h3>Vikundi vya mikopo <span class="badge grey">Inakuja</span></h3><p>Riba ya kila siku au mwezi na ratiba ya marejesho.</p></div>
+<div class="card"><h3>Malipo ya simu moja kwa moja <span class="badge grey">Inakuja</span></h3><p>Sasa unachagua njia ya malipo kwenye risiti; uunganishaji wa moja kwa moja bado haujakamilika.</p></div>
+</div></section>
+<section class="sec" id="thibitisha"><div class="card"><h2>Thibitisha risiti</h2>
+<form method="get" action="{{ url_for('verify') }}"><div class="row">
+<div class="f"><label for="r">Namba ya risiti</label><input id="r" name="r" placeholder="MK0000123" required></div>
+<div class="f"><label for="c">Kodi ya uthibitisho</label><input id="c" name="c" placeholder="A1B2C3D4" required></div>
+<button class="btn" type="submit">Thibitisha</button></div></form></div></section>
+<footer class="pf">© {{ year }} Mkolani POS, Mwanza, Tanzania · {{ support_phone }}{% if support_email %} · {{ support_email }}{% endif %}<br>
+<a href="{{ url_for('terms') }}">Masharti</a> · <a href="{{ url_for('privacy') }}">Faragha</a></footer>
+{% endblock %}

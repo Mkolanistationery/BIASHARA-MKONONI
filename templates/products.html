@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Stoko na Bidhaa{% endblock %}
+{% block heading %}Stoko na Bidhaa{% endblock %}
+{% block content %}
+{% set mgr = current_user.role in ['owner', 'manager'] %}
+<div class="grid"><div class="stat"><div class="l">Bidhaa</div><div class="v">{{ plist|length }}</div></div>
+<div class="stat"><div class="l">Zinazokaribia kuisha</div><div class="v">{{ low }}</div></div>
+{% if mgr %}<div class="stat"><div class="l">Thamani ya stoko (bei ya kununua)</div><div class="v">TZS {{ stock_value|money }}</div></div>{% endif %}</div>
+{% if mgr %}<div class="card"><details class="d"><summary>Ongeza bidhaa mpya</summary>
+<form method="post">{{ csrf_input() }}<div class="row">
+<div class="f"><label>Jina</label><input name="name" required maxlength="150"></div><div class="f"><label>Kundi</label><input name="category" maxlength="100"></div>
+<div class="f"><label>Barcode</label><input name="barcode" maxlength="50"></div></div><div class="row">
+<div class="f"><label>Bei ya kununua</label><input name="buy_price" type="number" min="0" value="0"></div>
+<div class="f"><label>Bei ya kuuza</label><input name="sell_price" type="number" min="0" value="0"></div>
+<div class="f"><label>Stoko</label><input name="stock" type="number" min="0" value="0"></div>
+<div class="f"><label>Tahadhari ikifika</label><input name="min_stock" type="number" min="0" value="5"></div>
+<button class="btn" type="submit">Hifadhi</button></div></form></details></div>{% endif %}
+<div class="card"><form class="toolbar" method="get"><input name="q" value="{{ q }}" placeholder="Tafuta jina, kundi au barcode" style="max-width:320px"><button class="btn ghost" type="submit">Tafuta</button></form>
+{% if plist %}<div class="tw"><table><tr><th>Bidhaa</th><th>Kundi</th>{% if mgr %}<th class="num">Kununua</th>{% endif %}<th class="num">Kuuza</th><th class="num">Stoko</th><th></th></tr>
+{% for p in plist %}<tr><td>{{ p.name }}{% if p.barcode %}<div class="small mute">{{ p.barcode }}</div>{% endif %}</td><td>{{ p.category or '' }}</td>
+{% if mgr %}<td class="num">{{ p.buy_price|money }}</td>{% endif %}<td class="num">{{ p.sell_price|money }}</td>
+<td class="num"><span class="badge {{ 'red' if p.stock <= 0 else ('gold' if p.stock <= p.min_stock else '') }}">{{ p.stock }}</span></td>
+<td>{% if mgr %}<details class="d"><summary>Hariri</summary>
+<form method="post" action="{{ url_for('product_restock', pid=p.id) }}" class="row">{{ csrf_input() }}<input name="qty" type="number" min="1" placeholder="Ongeza stoko"><button class="btn sm" type="submit">Ongeza</button></form>
+<form method="post" action="{{ url_for('product_edit', pid=p.id) }}">{{ csrf_input() }}
+<div class="row"><div class="f"><label>Jina</label><input name="name" value="{{ p.name }}" required></div><div class="f"><label>Kundi</label><input name="category" value="{{ p.category or '' }}"></div><div class="f"><label>Barcode</label><input name="barcode" value="{{ p.barcode or '' }}"></div></div>
+<div class="row"><div class="f"><label>Kununua</label><input name="buy_price" type="number" min="0" value="{{ p.buy_price }}"></div><div class="f"><label>Kuuza</label><input name="sell_price" type="number" min="0" value="{{ p.sell_price }}"></div><div class="f"><label>Stoko</label><input name="stock" type="number" min="0" value="{{ p.stock }}"></div><div class="f"><label>Tahadhari</label><input name="min_stock" type="number" min="0" value="{{ p.min_stock }}"></div></div>
+<button class="btn sm" type="submit">Hifadhi mabadiliko</button></form>
+<form method="post" action="{{ url_for('product_delete', pid=p.id) }}" data-confirm="Ondoa bidhaa hii kwenye orodha?" style="margin-top:8px">{{ csrf_input() }}<button class="btn danger sm" type="submit">Ondoa</button></form></details>{% endif %}</td></tr>{% endfor %}</table></div>
+{% else %}<p class="mute">Hakuna bidhaa bado.{% if mgr %} Tumia "Ongeza bidhaa mpya" hapo juu.{% endif %}</p>{% endif %}</div>
+{% endblock %}

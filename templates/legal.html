@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Masharti ya Matumizi' if page == 'terms' else 'Sera ya Faragha' }}{% endblock %}
+{% block heading %}{{ 'Masharti ya Matumizi' if page == 'terms' else 'Sera ya Faragha' }}{% endblock %}
+{% block content %}
+<div class="card">
+<div class="flash warning"><b>Rasimu.</b> Maandishi haya ni ya awali. Yapitiwe na mwanasheria kabla ya kuzindua rasmi.</div>
+{% if page == 'terms' %}
+<h1>Masharti ya Matumizi</h1>
+<p>Mkolani POS ni huduma ya kidijitali ya kurekodi mauzo, stoko, wateja, madeni na SMS kwa biashara. Kwa kutumia huduma hii unakubali masharti yafuatayo.</p>
+<h3>Akaunti</h3><p>Unawajibika kutunza nywila yako na shughuli zote zinazofanyika kwenye akaunti ya biashara yako, pamoja na za wafanyakazi unaowaongeza.</p>
+<h3>Matumizi yanayokatazwa</h3><p>Ni marufuku kutumia huduma kutuma SMS za udanganyifu, matusi au ujumbe usio na ridhaa ya mpokeaji, au kurekodi miamala ya uongo.</p>
+<h3>Majaribio na malipo</h3><p>Akaunti mpya ina kipindi cha majaribio. Baada ya hapo huduma inahitaji mpango wa kulipia. Tunaweza kusimamisha akaunti inayokiuka masharti.</p>
+<h3>Risiti</h3><p>Risiti zinazotolewa na mfumo huu ni rekodi za biashara yako. Si risiti za kodi za EFD za TRA isipokuwa imeelezwa vinginevyo. Biashara inawajibika kutimiza matakwa yake ya kodi.</p>
+<h3>Upatikanaji</h3><p>Tunajitahidi huduma ipatikane wakati wote, lakini hatuahidi kutokukatika.</p>
+{% else %}
+<h1>Sera ya Faragha</h1>
+<p>Tunakusanya taarifa unazotupa: jina na mawasiliano ya biashara na mmiliki, wateja, bidhaa, mauzo, madeni na matumizi.</p>
+<h3>Tunazitumia kwa nini</h3><p>Kuendesha huduma, kutuma SMS ulizoagiza, kuthibitisha risiti na kuzuia matumizi mabaya. Hatuuzi taarifa zako.</p>
+<h3>Wateja wako</h3><p>Taarifa za wateja unazoweka ni zako. Unawajibika kuzitumia kihalali na kupata ridhaa inayohitajika kabla ya kuwatumia SMS za matangazo.</p>
+<h3>Uthibitisho wa risiti</h3><p>Ukurasa wa umma wa kuthibitisha risiti unaonyesha jina la biashara, tarehe, jumla na hali ya risiti tu, na unahitaji namba na kodi ya risiti.</p>
+<h3>Usalama na haki zako</h3><p>Nywila zinahifadhiwa kwa hash. Unaweza kuomba kusahihishwa au kufutwa kwa taarifa zako kwa kuwasiliana nasi: {{ support_phone }}{% if support_email %}, {{ support_email }}{% endif %}.</p>
+{% endif %}
+</div>
+{% endblock %}

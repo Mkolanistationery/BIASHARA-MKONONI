@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Risiti {{ sale.receipt_no }}{% endblock %}
+{% block heading %}Risiti {{ sale.receipt_no }}{% endblock %}
+{% block content %}
+<div class="noprint toolbar"><button class="btn" type="button" data-print>Chapisha</button><a class="btn ghost" href="{{ url_for('sales') }}">Mauzo mapya</a>
+{% if current_user.role in ['owner', 'manager'] and sale.status != 'void' %}
+<form method="post" action="{{ url_for('sale_void', sale_id=sale.id) }}" class="inline" data-confirm="Batilisha risiti hii na kurudisha stoko?">{{ csrf_input() }}
+<input name="reason" placeholder="Sababu ya kubatilisha" required style="width:220px"> <button class="btn danger" type="submit">Batilisha</button></form>{% endif %}</div>
+<div class="slip">
+{% if biz.logo_data %}<img class="logo" src="{{ biz.logo_data }}" alt="">{% endif %}
+<h2>{{ biz.name }}</h2>
+<p class="c">{% if biz.address %}{{ biz.address }}<br>{% endif %}{% if biz.phone %}Simu: {{ biz.phone }}{% endif %}</p>
+{% if sale.status == 'void' %}<p class="c"><b>*** IMEBATILISHWA ***</b></p>{% endif %}
+<hr>
+<table><tr><td>Risiti</td><td class="num">{{ sale.receipt_no }}</td></tr><tr><td>Tarehe</td><td class="num">{{ sale.created_at|dt }}</td></tr>
+<tr><td>Mteja</td><td class="num">{{ sale.customer_name }}</td></tr><tr><td>Muuzaji</td><td class="num">{{ sale.user.name if sale.user else '-' }}</td></tr></table><hr>
+<table>{% for i in sale.items %}<tr><td colspan="2">{{ i.name }}</td></tr><tr><td>{{ i.qty }} x {{ i.price|money }}</td><td class="num">{{ i.total|money }}</td></tr>{% endfor %}</table><hr>
+<table><tr><td><b>JUMLA</b></td><td class="num"><b>TZS {{ sale.total|money }}</b></td></tr>
+<tr><td>Malipo</td><td class="num">{{ sale.payment_method }}</td></tr>
+{% if sale.status == 'credit' %}<tr><td>Kilicholipwa</td><td class="num">{{ sale.paid|money }}</td></tr><tr><td>Deni</td><td class="num">{{ (sale.total - sale.paid)|money }}</td></tr>{% endif %}</table><hr>
+<p class="c">{{ biz.receipt_footer or 'Asante, karibu tena!' }}</p>
+{% if qr %}<div class="qr">{{ qr|safe }}<br><span style="font-size:11px">Thibitisha: kodi {{ sale.verify_code }}</span></div>{% endif %}
+</div>
+<p class="noprint small mute" style="text-align:center;word-break:break-all">{{ verify_url }}</p>
+{% endblock %}

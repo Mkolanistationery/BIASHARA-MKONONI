@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Jisajili - Mkolani POS{% endblock %}
+{% block content %}
+<div class="card"><h1>Fungua akaunti ya biashara</h1>
+<p class="mute">Siku {{ trial_days }} za majaribio. Hakuna kadi inayohitajika.</p>
+<form method="post" action="{{ url_for('register') }}">{{ csrf_input() }}
+<div class="f"><label for="bn">Jina la biashara</label><input id="bn" name="business_name" required maxlength="150" value="{{ form.get('business_name', '') }}"></div>
+<div class="f"><label for="bt">Aina ya biashara</label><select id="bt" name="business_type">
+{% for v, l in [('retail','Duka / rejareja'),('wholesale','Jumla'),('service','Huduma'),('pharmacy','Duka la dawa'),('restaurant','Mgahawa'),('other','Nyingine')] %}<option value="{{ v }}" {{ 'selected' if form.get('business_type') == v }}>{{ l }}</option>{% endfor %}</select></div>
+<div class="f"><label for="on">Jina lako</label><input id="on" name="owner_name" required maxlength="150" value="{{ form.get('owner_name', '') }}"></div>
+<div class="f"><label for="em">Barua pepe</label><input id="em" name="email" type="email" required value="{{ form.get('email', '') }}" autocomplete="email"></div>
+<div class="f"><label for="ph">Namba ya simu</label><input id="ph" name="phone" inputmode="tel" required placeholder="0768XXXXXX" value="{{ form.get('phone', '') }}"></div>
+<div class="f"><label for="pw">Nywila</label><input id="pw" name="password" type="password" required minlength="8" autocomplete="new-password"><span class="small mute">Angalau herufi 8, zenye herufi na namba.</span></div>
+<div class="f"><label for="cp">Rudia nywila</label><input id="cp" name="confirm_password" type="password" required autocomplete="new-password"></div>
+<div class="f"><label><input type="checkbox" name="accept" value="1" required> Nakubali <a href="{{ url_for('terms') }}" target="_blank">Masharti</a> na <a href="{{ url_for('privacy') }}" target="_blank">Sera ya Faragha</a></label></div>
+<button class="btn block" type="submit">Fungua akaunti</button></form>
+<p class="small" style="margin-top:12px">Tayari una akaunti? <a href="{{ url_for('login') }}">Ingia</a></p></div>
+{% endblock %}
