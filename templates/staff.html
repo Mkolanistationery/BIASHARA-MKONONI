@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Wafanyakazi{% endblock %}
+{% block heading %}Wafanyakazi{% endblock %}
+{% block content %}
+<div class="card"><h2>Ongeza mfanyakazi</h2><p class="mute">Mpango wako unaruhusu wafanyakazi {{ cap }} pamoja na wewe. Meneja anaona ripoti na matumizi; muuzaji anaona mauzo, wateja na madeni tu.</p>
+<form method="post">{{ csrf_input() }}<div class="row"><div class="f"><label>Jina</label><input name="name" required></div><div class="f"><label>Barua pepe</label><input name="email" type="email" required></div>
+<div class="f"><label>Simu</label><input name="phone" required inputmode="tel"></div><div class="f"><label>Nafasi</label><select name="role"><option value="cashier">Muuzaji</option><option value="manager">Meneja</option></select></div>
+<div class="f"><label>Nywila ya kuanzia</label><input name="password" type="password" required minlength="8" autocomplete="new-password"></div><button class="btn" type="submit">Ongeza</button></div></form></div>
+<div class="card"><div class="tw"><table><tr><th>Jina</th><th>Nafasi</th><th>Mara ya mwisho</th><th>Hali</th><th></th></tr>
+{% for u in users %}<tr><td>{{ u.name }}<div class="small mute">{{ u.email }}</div></td><td>{{ ROLE_LABELS[u.role] }}</td><td class="nowrap">{{ u.last_login|dt if u.last_login else '-' }}</td>
+<td><span class="badge {{ '' if u.active else 'red' }}">{{ 'Hai' if u.active else 'Imezimwa' }}</span></td>
+<td>{% if u.id != current_user.id %}<form method="post" action="{{ url_for('staff_toggle', uid=u.id) }}" class="inline">{{ csrf_input() }}<button class="btn ghost sm" type="submit">{{ 'Zima' if u.active else 'Washa' }}</button></form>
+<details class="d"><summary>Weka nywila mpya</summary><form method="post" action="{{ url_for('staff_password', uid=u.id) }}" class="row">{{ csrf_input() }}<input name="password" type="password" minlength="8" required><button class="btn sm" type="submit">Weka</button></form></details>{% endif %}</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

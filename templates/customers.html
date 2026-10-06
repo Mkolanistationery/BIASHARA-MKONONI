@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Wateja{% endblock %}
+{% block heading %}Wateja (CRM){% endblock %}
+{% block content %}
+{% set mgr = current_user.role in ['owner', 'manager'] %}
+<div class="card"><details class="d"><summary>Sajili mteja mpya</summary>
+<form method="post">{{ csrf_input() }}<div class="row"><div class="f"><label>Jina</label><input name="name" required maxlength="150"></div>
+<div class="f"><label>Simu</label><input name="phone" required inputmode="tel" placeholder="0768XXXXXX"></div><div class="f"><label>Anwani</label><input name="address" maxlength="200"></div></div>
+<div class="f"><label>Maelezo</label><input name="notes" maxlength="500"></div><button class="btn" type="submit">Hifadhi</button></form></details></div>
+<div class="card"><form class="toolbar" method="get"><input name="q" value="{{ q }}" placeholder="Tafuta jina au simu" style="max-width:320px"><button class="btn ghost" type="submit">Tafuta</button></form>
+{% if clist %}<div class="tw"><table><tr><th>Mteja</th><th>Simu</th><th class="num">Amenunua (TZS)</th><th class="num">Deni (TZS)</th><th></th></tr>
+{% for c in clist %}<tr><td>{{ c.name }}{% if c.address %}<div class="small mute">{{ c.address }}</div>{% endif %}</td><td>{{ c.phone }}</td>
+<td class="num">{{ (spent.get(c.id) or 0)|money }}</td><td class="num">{% if owed.get(c.id) %}<span class="badge red">{{ owed.get(c.id)|money }}</span>{% else %}0{% endif %}</td>
+<td>{% if mgr %}<details class="d"><summary>Hariri</summary><form method="post" action="{{ url_for('customer_edit', cid=c.id) }}">{{ csrf_input() }}
+<div class="row"><div class="f"><label>Jina</label><input name="name" value="{{ c.name }}" required></div><div class="f"><label>Simu</label><input name="phone" value="{{ c.phone }}" required></div></div>
+<div class="row"><div class="f"><label>Anwani</label><input name="address" value="{{ c.address or '' }}"></div><div class="f"><label>Maelezo</label><input name="notes" value="{{ c.notes or '' }}"></div></div>
+<button class="btn sm" type="submit">Hifadhi</button></form>
+<form method="post" action="{{ url_for('customer_delete', cid=c.id) }}" data-confirm="Ondoa mteja huyu kwenye orodha?" style="margin-top:8px">{{ csrf_input() }}<button class="btn danger sm" type="submit">Ondoa</button></form></details>{% endif %}</td></tr>{% endfor %}</table></div>
+{% else %}<p class="mute">Hakuna wateja bado.</p>{% endif %}</div>
+{% endblock %}

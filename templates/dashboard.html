@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Dashibodi{% endblock %}
+{% block heading %}Dashibodi{% endblock %}
+{% block content %}
+{% for a in ann %}<div class="flash info"><b>{{ a.title }}</b>{% if a.body %}<br>{{ a.body }}{% endif %}</div>{% endfor %}
+{% if trial_left is not none %}<div class="flash warning">Majaribio yako yanaisha baada ya siku {{ trial_left }}. Wasiliana nasi kuendelea: {{ support_phone }}.</div>{% endif %}
+{% set mgr = current_user.role in ['owner', 'manager'] %}
+<div class="grid">
+<div class="stat hero"><div class="l">Mauzo ya leo ({{ today_count }})</div><div class="v">TZS {{ today_sales|money }}</div></div>
+{% if mgr %}<div class="stat"><div class="l">Faida ya leo</div><div class="v">TZS {{ today_profit|money }}</div></div>
+<div class="stat"><div class="l">Matumizi ya mwezi</div><div class="v">TZS {{ month_exp|money }}</div></div>{% endif %}
+<div class="stat"><div class="l">Madeni yasiyolipwa</div><div class="v">TZS {{ owed|money }}</div></div>
+</div>
+<div class="grid2">
+<div class="card"><h2>Mauzo ya siku 7</h2>
+<div class="bars">{% for s in series %}<div class="{{ 'z' if loop.last }}"><i style="height:{{ s.pct }}%" title="{{ s.date }}: TZS {{ s.value|money }}"></i>{{ s.label }}</div>{% endfor %}</div></div>
+<div class="card"><h2>Bidhaa zinazouzika zaidi (mwezi)</h2>
+{% if top %}<div class="tw"><table><tr><th>Bidhaa</th><th class="num">Idadi</th><th class="num">TZS</th></tr>
+{% for n, q, t in top %}<tr><td>{{ n }}</td><td class="num">{{ q }}</td><td class="num">{{ t|money }}</td></tr>{% endfor %}</table></div>
+{% else %}<p class="mute">Bado hakuna mauzo mwezi huu. <a href="{{ url_for('sales') }}">Fanya mauzo ya kwanza</a>.</p>{% endif %}</div>
+<div class="card"><h2>Stoko inayokaribia kuisha</h2>
+{% if low_stock %}<div class="tw"><table><tr><th>Bidhaa</th><th class="num">Zilizobaki</th></tr>
+{% for p in low_stock %}<tr><td>{{ p.name }}</td><td class="num"><span class="badge {{ 'red' if p.stock == 0 else 'gold' }}">{{ p.stock }}</span></td></tr>{% endfor %}</table></div>
+{% else %}<p class="mute">Stoko yote iko sawa.</p>{% endif %}</div>
+<div class="card"><h2>Madeni yaliyochelewa</h2>
+{% if overdue %}<div class="tw"><table><tr><th>Mteja</th><th>Tarehe</th><th class="num">Salio</th></tr>
+{% for d in overdue %}<tr><td>{{ d.customer_name }}</td><td>{{ d.due_date|d }}</td><td class="num">{{ d.balance|money }}</td></tr>{% endfor %}</table></div>
+{% if mgr %}<form method="post" action="{{ url_for('sms_remind') }}" data-confirm="Tuma SMS ya kikumbusho kwa wadaiwa waliochelewa? Credits zitakatwa.">{{ csrf_input() }}<button class="btn sm" type="submit">Tuma vikumbusho vya SMS</button></form>{% endif %}
+{% else %}<p class="mute">Hakuna deni lililochelewa.</p>{% endif %}</div>
+</div>
+{% endblock %}

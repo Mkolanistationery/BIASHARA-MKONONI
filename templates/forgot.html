@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Umesahau nywila{% endblock %}
+{% block content %}
+<div class="card"><h1>Umesahau nywila?</h1>
+<p class="mute">Weka namba ya simu uliyosajili. Tutatuma kodi ya tarakimu 6 kwa SMS.</p>
+<form method="post">{{ csrf_input() }}
+<div class="f"><label for="ph">Namba ya simu</label><input id="ph" name="phone" inputmode="tel" required placeholder="0768XXXXXX"></div>
+<button class="btn block" type="submit">Tuma kodi</button></form>
+<p class="small" style="margin-top:12px"><a href="{{ url_for('reset_password') }}">Nina kodi tayari</a> · <a href="{{ url_for('login') }}">Rudi kuingia</a></p></div>
+{% endblock %}

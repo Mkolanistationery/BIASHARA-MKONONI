@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Ingia - Mkolani POS{% endblock %}
+{% block content %}
+<div class="card"><h1>Karibu tena</h1>
+<form method="post" action="{{ url_for('login') }}">{{ csrf_input() }}
+<div class="f"><label for="email">Barua pepe</label><input id="email" name="email" type="email" required autocomplete="username" autofocus></div>
+<div class="f"><label for="password">Nywila</label><input id="password" name="password" type="password" required autocomplete="current-password"></div>
+<button class="btn block" type="submit">Ingia</button></form>
+<p class="small" style="margin-top:12px"><a href="{{ url_for('forgot_password') }}">Umesahau nywila?</a> · <a href="{{ url_for('register') }}">Fungua akaunti mpya</a></p></div>
+{% endblock %}

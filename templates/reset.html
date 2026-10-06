@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Weka nywila mpya{% endblock %}
+{% block content %}
+<div class="card"><h1>Weka nywila mpya</h1>
+<form method="post">{{ csrf_input() }}
+<div class="f"><label for="ph">Namba ya simu</label><input id="ph" name="phone" inputmode="tel" required placeholder="0768XXXXXX"></div>
+<div class="f"><label for="cd">Kodi ya SMS</label><input id="cd" name="code" inputmode="numeric" required maxlength="6" autocomplete="one-time-code"></div>
+<div class="f"><label for="pw">Nywila mpya</label><input id="pw" name="password" type="password" required minlength="8" autocomplete="new-password"></div>
+<button class="btn block" type="submit">Badilisha nywila</button></form>
+<p class="small" style="margin-top:12px"><a href="{{ url_for('forgot_password') }}">Omba kodi mpya</a></p></div>
+{% endblock %}
