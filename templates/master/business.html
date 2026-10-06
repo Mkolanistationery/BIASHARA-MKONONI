@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{ b.name }}{% endblock %}
+{% block heading %}{{ b.name }}{% endblock %}
+{% block content %}
+<div class="grid"><div class="stat"><div class="l">Mauzo (yaliyo halali)</div><div class="v">{{ n_sales }}</div></div><div class="stat"><div class="l">Jumla ya mauzo</div><div class="v">TZS {{ total|money }}</div></div>
+<div class="stat"><div class="l">SMS credits</div><div class="v">{{ b.sms_credits|money }}</div></div>
+<div class="stat"><div class="l">Hali</div><div class="v">{{ 'Imesimamishwa' if b.status == 'suspended' else ('Hai' if b.is_usable() else 'Imeisha') }}</div></div></div>
+<div class="grid2">
+<div class="card"><h2>Mpango</h2><form method="post" action="{{ url_for('master.business_plan', bid=b.id) }}">{{ csrf_input() }}
+<div class="f"><label>Mpango</label><select name="plan">{% for k, v in PLANS.items() %}<option value="{{ k }}" {{ 'selected' if b.plan == k }}>{{ v.name }}</option>{% endfor %}</select></div>
+<div class="f"><label>Ongeza siku za majaribio (kwa Majaribio)</label><input name="extend_days" type="number" min="0" value="0"></div>
+<div class="f"><label>Umelipiwa hadi (acha tupu = bila kikomo)</label><input name="paid_until" type="date"></div>
+<p class="small mute">Sasa: {% if b.plan == 'trial' %}majaribio yanaisha {{ b.trial_ends|dt }}{% else %}{{ 'hadi ' ~ (b.paid_until|dt) if b.paid_until else 'bila kikomo' }}{% endif %}</p>
+<button class="btn" type="submit">Hifadhi mpango</button></form></div>
+<div class="card"><h2>SMS credits</h2><form method="post" action="{{ url_for('master.business_credits', bid=b.id) }}">{{ csrf_input() }}
+<div class="f"><label>Ongeza (au toa kwa kuweka namba hasi)</label><input name="amount" type="number" required></div><div class="f"><label>Sababu / kumbukumbu ya malipo</label><input name="reason" maxlength="100"></div>
+<button class="btn" type="submit">Badilisha credits</button></form>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"><form method="post" action="{{ url_for('master.business_status', bid=b.id) }}" data-confirm="Badilisha hali ya biashara hii?">{{ csrf_input() }}
+<button class="btn {{ 'danger' if b.status == 'active' else '' }}" type="submit">{{ 'Simamisha biashara' if b.status == 'active' else 'Washa biashara' }}</button></form></div></div>
+<div class="card"><h2>Watumiaji</h2><div class="tw"><table><tr><th>Jina</th><th>Barua pepe</th><th>Simu</th><th>Nafasi</th><th>Mara ya mwisho</th><th>Hali</th></tr>
+{% for u in users %}<tr><td>{{ u.name }}</td><td>{{ u.email }}</td><td>{{ u.phone or '' }}</td><td>{{ ROLE_LABELS[u.role] }}</td><td class="nowrap">{{ u.last_login|dt if u.last_login else '-' }}</td><td>{{ 'Hai' if u.active else 'Imezimwa' }}</td></tr>{% endfor %}</table></div></div>
+<div class="card"><h2>Shughuli za hivi karibuni</h2><div class="tw"><table>{% for l in logs %}<tr><td class="nowrap small">{{ l.created_at|dt }}</td><td>{{ l.user.name if l.user else '-' }}</td><td>{{ l.action }}</td><td class="small">{{ l.detail or '' }}</td></tr>{% else %}<tr><td class="mute">Hakuna.</td></tr>{% endfor %}</table></div>
+<a href="{{ url_for('master.audit_view', business_id=b.id) }}" class="small">Ona zote</a></div>
+{% endblock %}

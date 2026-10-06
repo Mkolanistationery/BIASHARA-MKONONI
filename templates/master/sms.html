@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}SMS za jukwaa{% endblock %}
+{% block heading %}SMS za jukwaa{% endblock %}
+{% block content %}
+<div class="card"><h2>Akaunti ya Beem</h2>
+{% if not enabled %}<div class="flash warning">BEEM_API_KEY na BEEM_SECRET_KEY hazijawekwa kwenye Environment.</div>
+{% else %}{% if checked %}{% if balance is not none %}<p>Salio la Beem: <b>{{ balance|money }}</b></p>{% else %}<div class="flash danger">{{ err }}</div>{% endif %}{% endif %}
+<a class="btn ghost" href="{{ url_for('master.sms', check=1) }}">Angalia salio la Beem</a>{% endif %}
+<p class="small mute" style="margin-top:10px">"Imekubaliwa" inamaanisha Beem imepokea ombi, si kwamba SMS imefika simuni. Angalia ripoti za delivery kwenye dashibodi ya Beem.</p></div>
+<div class="card"><h2>SMS 100 za mwisho</h2><div class="tw"><table><tr><th>Muda</th><th>Biashara</th><th>Wapokeaji</th><th>Hali</th><th>Maelezo</th></tr>
+{% for l in logs %}<tr><td class="nowrap">{{ l.created_at|dt }}</td><td>{{ l.business.name if l.business else 'Jukwaa (OTP)' }}</td><td>{{ l.recipient }}{% if l.recipients_count > 1 %} ({{ l.recipients_count }}){% endif %}</td>
+<td><span class="badge {{ '' if l.status == 'accepted' else 'red' }}">{{ l.status }}</span></td><td class="small">{{ l.detail or '' }}</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

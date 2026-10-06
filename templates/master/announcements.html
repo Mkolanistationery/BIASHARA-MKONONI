@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Matangazo{% endblock %}
+{% block heading %}Matangazo kwa watumiaji wote{% endblock %}
+{% block content %}
+<div class="card"><h2>Tangazo jipya</h2><p class="mute">Linaonekana juu ya dashibodi ya kila biashara (matangazo 3 ya mwisho yaliyo hai).</p>
+<form method="post">{{ csrf_input() }}<div class="f"><label>Kichwa</label><input name="title" required maxlength="150"></div><div class="f"><label>Maelezo</label><textarea name="body" maxlength="1000"></textarea></div><button class="btn" type="submit">Chapisha</button></form></div>
+<div class="card"><div class="tw"><table><tr><th>Tangazo</th><th>Hali</th><th></th></tr>
+{% for a in alist %}<tr><td><b>{{ a.title }}</b><div class="small mute">{{ a.created_at|dt }}</div>{{ a.body or '' }}</td><td><span class="badge {{ '' if a.active else 'grey' }}">{{ 'Hai' if a.active else 'Limefichwa' }}</span></td>
+<td><form method="post" action="{{ url_for('master.announcement_toggle', aid=a.id) }}" class="inline">{{ csrf_input() }}<button class="btn ghost sm" type="submit">{{ 'Ficha' if a.active else 'Onyesha' }}</button></form>
+<form method="post" action="{{ url_for('master.announcement_delete', aid=a.id) }}" class="inline" data-confirm="Futa tangazo hili?">{{ csrf_input() }}<button class="btn danger sm" type="submit">Futa</button></form></td></tr>{% else %}<tr><td colspan="3" class="mute">Hakuna matangazo.</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Muhtasari - Master{% endblock %}
+{% block heading %}Muhtasari wa mfumo{% endblock %}
+{% block content %}
+<div class="grid">
+<div class="stat hero"><div class="l">Mauzo ya leo kwenye jukwaa ({{ stats.sales_today_n }})</div><div class="v">TZS {{ stats.sales_today|money }}</div></div>
+<div class="stat"><div class="l">Biashara zote</div><div class="v">{{ stats.biz_total }}</div></div>
+<div class="stat"><div class="l">Watumiaji</div><div class="v">{{ stats.users }}</div></div>
+<div class="stat"><div class="l">Majaribio hai</div><div class="v">{{ stats.trial_active }}</div></div>
+<div class="stat"><div class="l">Majaribio yaliyoisha</div><div class="v">{{ stats.trial_expired }}</div></div>
+<div class="stat"><div class="l">Mipango ya kulipia</div><div class="v">{{ stats.paid }}</div></div>
+<div class="stat"><div class="l">Zilizosimamishwa</div><div class="v">{{ stats.suspended }}</div></div>
+<div class="stat"><div class="l">Usajili siku 7 / 30</div><div class="v">{{ stats.signups7 }} / {{ stats.signups30 }}</div></div>
+<div class="stat"><div class="l">SMS leo</div><div class="v">{{ stats.sms_today|money }}</div></div>
+<div class="stat"><div class="l">Credits zilizobaki kwa wateja</div><div class="v">{{ stats.credits|money }}</div></div></div>
+<div class="grid2">
+<div class="card"><h2>Biashara mpya</h2><div class="tw"><table><tr><th>Biashara</th><th>Mmiliki</th><th>Mpango</th></tr>
+{% for b in recent_biz %}<tr><td><a href="{{ url_for('master.business', bid=b.id) }}">{{ b.name }}</a><div class="small mute">{{ b.created_at|dt }}</div></td><td>{{ owners[b.id].name if b.id in owners else '-' }}</td><td>{{ PLANS[b.plan].name }}</td></tr>{% endfor %}</table></div></div>
+<div class="card"><h2>Shughuli za hivi karibuni</h2><div class="tw"><table>{% for l in logs %}<tr><td class="nowrap small">{{ l.created_at|dt }}</td><td>{{ l.action }}<div class="small mute">{{ l.detail or '' }}</div></td></tr>{% endfor %}</table></div></div>
+</div>
+{% endblock %}

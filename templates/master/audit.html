@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Kumbukumbu{% endblock %}
+{% block heading %}Kumbukumbu za shughuli{% endblock %}
+{% block content %}
+<form class="toolbar" method="get"><input name="business_id" value="{{ bid }}" placeholder="Namba ya biashara (hiari)" style="max-width:240px"><button class="btn ghost" type="submit">Chuja</button></form>
+<div class="card"><div class="tw"><table><tr><th>Muda</th><th>Biashara</th><th>Mtumiaji</th><th>Kitendo</th><th>Maelezo</th><th>IP</th></tr>
+{% for l in logs %}<tr><td class="nowrap">{{ l.created_at|dt }}</td><td>{{ l.business.name if l.business else '-' }}</td><td>{{ l.user.email if l.user else '-' }}</td><td>{{ l.action }}</td><td class="small">{{ l.detail or '' }}</td><td class="small">{{ l.ip or '' }}</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

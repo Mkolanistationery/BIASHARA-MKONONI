@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Watumiaji{% endblock %}
+{% block heading %}Watumiaji{% endblock %}
+{% block content %}
+<form class="toolbar" method="get"><input name="q" value="{{ q }}" placeholder="Tafuta jina, barua pepe au simu" style="max-width:340px"><button class="btn ghost" type="submit">Tafuta</button></form>
+<div class="card"><div class="tw"><table><tr><th>Mtumiaji</th><th>Biashara</th><th>Nafasi</th><th>Mara ya mwisho</th><th>Hali</th><th></th></tr>
+{% for u in ulist %}<tr><td>{{ u.name }}<div class="small mute">{{ u.email }} · {{ u.phone or '' }}</div></td><td>{% if u.business %}<a href="{{ url_for('master.business', bid=u.business_id) }}">{{ u.business.name }}</a>{% endif %}</td><td>{{ ROLE_LABELS[u.role] }}</td>
+<td class="nowrap">{{ u.last_login|dt if u.last_login else '-' }}</td>
+<td><span class="badge {{ '' if u.active else 'red' }}">{{ 'Hai' if u.active else 'Imezimwa' }}</span>{% if u.locked_until and u.locked_until > now %} <span class="badge gold">Imefungwa</span>{% endif %}</td>
+<td><form method="post" action="{{ url_for('master.user_toggle', uid=u.id) }}" class="inline" data-confirm="Badilisha hali ya mtumiaji huyu?">{{ csrf_input() }}<button class="btn ghost sm" type="submit">{{ 'Zima' if u.active else 'Washa' }}</button></form>
+{% if u.locked_until and u.locked_until > now %}<form method="post" action="{{ url_for('master.user_unlock', uid=u.id) }}" class="inline">{{ csrf_input() }}<button class="btn sm" type="submit">Fungua</button></form>{% endif %}</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

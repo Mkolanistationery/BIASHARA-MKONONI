@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Biashara{% endblock %}
+{% block heading %}Biashara{% endblock %}
+{% block content %}
+<div class="toolbar tabs">{% for k, l in [('','Zote'),('trial','Majaribio hai'),('expired','Majaribio yameisha'),('paid','Zinazolipia'),('suspended','Zilizosimamishwa')] %}<a href="{{ url_for('master.businesses', f=k, q=q) }}" class="{{ 'on' if flt == k }}">{{ l }}</a>{% endfor %}
+<form method="get"><input type="hidden" name="f" value="{{ flt }}"><input name="q" value="{{ q }}" placeholder="Tafuta jina au simu"><button class="btn ghost sm" type="submit">Tafuta</button></form></div>
+<div class="card"><div class="tw"><table><tr><th>Biashara</th><th>Mmiliki</th><th>Mpango</th><th>Hali</th><th>Mwisho</th><th class="num">Watumiaji</th><th class="num">SMS</th></tr>
+{% for b in blist %}<tr><td><a href="{{ url_for('master.business', bid=b.id) }}">{{ b.name }}</a><div class="small mute">{{ b.created_at|dt }}</div></td>
+<td>{{ owners[b.id].name if b.id in owners else '-' }}<div class="small mute">{{ b.phone or '' }}</div></td><td>{{ PLANS[b.plan].name }}</td>
+<td>{% if b.status == 'suspended' %}<span class="badge red">Imesimamishwa</span>{% elif not b.is_usable() %}<span class="badge red">Imeisha</span>{% else %}<span class="badge">Hai</span>{% endif %}</td>
+<td class="nowrap">{% if b.plan == 'trial' %}{{ b.trial_ends|dt }}{% else %}{{ b.paid_until|dt if b.paid_until else 'Bila kikomo' }}{% endif %}</td>
+<td class="num">{{ counts.get(b.id, 0) }}</td><td class="num">{{ b.sms_credits|money }}</td></tr>{% else %}<tr><td colspan="7" class="mute">Hakuna biashara.</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

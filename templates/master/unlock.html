@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Thibitisha{% endblock %}
+{% block heading %}Thibitisha utambulisho{% endblock %}
+{% block content %}
+<div class="card" style="max-width:420px"><h2>Weka nywila yako tena</h2><p class="mute">Eneo hili ni la ndani. Ufikiaji unadumu dakika 30.</p>
+<form method="post">{{ csrf_input() }}<div class="f"><label for="pw">Nywila</label><input id="pw" name="password" type="password" required autofocus autocomplete="current-password"></div>
+<button class="btn block" type="submit">Fungua</button></form></div>
+{% endblock %}
