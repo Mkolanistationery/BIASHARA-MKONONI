@@ -1,0 +1,33 @@
+# Hiari: Blueprint ya Render. Kama huduma yako tayari ipo, weka Environment Variables kwa mkono badala yake.
+databases:
+  - name: mkolani-db
+    databaseName: mkolani
+    user: mkolani
+    plan: free
+services:
+  - type: web
+    name: mkolani-pos-system
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --preload --workers 2 --timeout 60
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mkolani-db
+          property: connectionString
+      - key: MASTER_EMAIL
+        sync: false
+      - key: MASTER_PASSWORD
+        sync: false
+      - key: BEEM_API_KEY
+        sync: false
+      - key: BEEM_SECRET_KEY
+        sync: false
+      - key: BEEM_SENDER_ID
+        sync: false
